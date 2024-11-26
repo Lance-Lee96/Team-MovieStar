@@ -41,7 +41,7 @@ const TopRecommendation = ({ movies }) => {
           onClick={handleClick}
         >
           <img
-            src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`} // 영화 배경 이미지
+            src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`} // 영화 배경 이미지
             alt={movie.title}
             className="top-recommendation-poster"
           />
