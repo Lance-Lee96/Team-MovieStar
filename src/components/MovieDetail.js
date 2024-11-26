@@ -11,8 +11,6 @@ const MovieDetail = () => {
   const [rate,setRate] = useState('5')
   const [review, setReview] = useState("")
   const [reviewList, setReviewList] = useState([])
-  const [editable, setEditable] = useState(false)
-  const [editId, setEditId] = useState(-1)
 
   const navigate = useNavigate(); // 뒤로가기 버튼 처리를 위한 네비게이션
 
@@ -32,11 +30,6 @@ const MovieDetail = () => {
     const newList = reviewList.filter((item) => item.id !== id)
     setReviewList(newList)
   } 
-
-  const handleEdit = (id) =>{
-    setEditId(id)
-    setEditable(true)
-  }
 
 
   useEffect(() => {
@@ -63,7 +56,7 @@ const MovieDetail = () => {
     </button>
       <div className="detail-header">
         <img
-          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} // 영화 포스터 이미지
           alt={movie.title}
         />
         <div>
@@ -75,7 +68,7 @@ const MovieDetail = () => {
       </div>
       <div>
         <p><strong>리뷰 작성</strong></p>
-        <p>유저 평점: {reviewList.length === 0 ? 0 :(reviewList.reduce((acc,cur) => {return acc + cur.rate},0) / reviewList.length).toFixed(2)}</p>
+        <p>유저 평점: {(reviewList.reduce((acc,cur) => {return acc + cur.rate},0) / reviewList.length).toFixed(2)}</p>
         <select name="rate" onChange={(e) => setRate(e.target.value)}>
           <option value='5'>★★★★★</option>
           <option value='4'>★★★★☆</option>
@@ -95,7 +88,7 @@ const MovieDetail = () => {
                 <span>{item.rate}</span>
                 <span>{item.review}</span>
                 <span>{item.date}</span>
-                <button onClick={() => handleEdit(item.id)}>수정</button>
+                <button>수정</button>
                 <button onClick={() => handleRemove(item.id)}>삭제</button>
               </li>
             )

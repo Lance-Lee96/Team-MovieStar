@@ -58,8 +58,8 @@ input {
 
 .top-recommendation-poster {
   width: 100%;
-  height: auto;
-  max-width: 1000px;
+  height: 100%;
+  object-fit: cover;
   border-radius: 10px;
   filter: brightness(50%);
 }
