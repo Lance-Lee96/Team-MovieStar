@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchMovieDetails } from "../api/tmdb";
-import {Ionicons} from "@expo/vector-icons"
+import { FaStar } from "react-icons/fa";
 import moment from "moment";
 import "../css/App.css";
 
@@ -14,6 +14,7 @@ const MovieDetail = () => {
   const [reviewList, setReviewList] = useState([])
   const [editable, setEditable] = useState(false)
   const [editId, setEditId] = useState(-1)
+  const [editRate, setEditRate] = useState(5)
   const [editedReview, setEditedReview] = useState("")
 
   const navigate = useNavigate(); // 뒤로가기 버튼 처리를 위한 네비게이션
@@ -39,7 +40,7 @@ const MovieDetail = () => {
     setEditId(item.id)
     setEditable(true)
     setEditedReview(item.review)
-    setRate("5")
+    setEditRate(item.rate)
     console.log(editId + "/" + editable)
   }
 
@@ -82,13 +83,16 @@ const MovieDetail = () => {
       <div>
         <p><strong>리뷰 작성</strong></p>
         <p>유저 평점: {reviewList.length === 0 ? 0 : (reviewList.reduce((acc, cur) => { return acc + cur.rate }, 0) / reviewList.length).toFixed(2)}</p>
-        <select name="rate" onChange={(e) => setRate(e.target.value)}>
-          <option value='5'>★★★★★</option>
-          <option value='4'>★★★★☆</option>
-          <option value='3'>★★★☆☆</option>
-          <option value='2'>★★☆☆☆</option>
-          <option value='1'>★☆☆☆☆</option>
-        </select>
+        <div style={{ cursor: "pointer" }}>
+          {[...Array(5)].map((_, index) => (
+            <FaStar
+              key={index}
+              size={30} // 별 크기
+              color={index < rate ? "gold" : "lightgray"} // 선택 여부에 따른 색상
+              onClick={() => setRate(index + 1)} // 클릭 이벤트
+            />
+          ))}
+        </div>
         <input placeholder="리뷰의 내용을 입력해주세요" value={review} onChange={(e) => setReview(e.target.value)} />
         <button onClick={buttonHandle}>올리기</button>
       </div>
@@ -99,31 +103,42 @@ const MovieDetail = () => {
               <li key={item.id} className="review-item">
                 <div className="review-item-container">
                   <span>{item.user}</span>
-                  <span>{item.rate}</span>
+                  <div>
+                    {[...Array(item.rate)].map((_, index) => (
+                      <FaStar
+                        key={index}
+                        size={15}
+                        color={"gold"}
+                      />
+                    ))}
+                  </div>
                   <span>{item.review}</span>
                   <span>{item.date}</span>
                   <button onClick={() => handleEdit(item)}>수정</button>
                   <button onClick={() => handleRemove(item.id)}>삭제</button>
                 </div>
-                {editable && item.id == editId &&
-                (<div className="review-item-edit">
-                  <span></span>
-                  <select name="rate" onChange={(e) => setRate(e.target.value)}>
-                    <option value='5'>★★★★★</option>
-                    <option value='4'>★★★★☆</option>
-                    <option value='3'>★★★☆☆</option>
-                    <option value='2'>★★☆☆☆</option>
-                    <option value='1'>★☆☆☆☆</option>
-                  </select>
-                  <input placeholder="리뷰의 내용을 입력해주세요" value={editedReview} onChange={(e) => setEditedReview(e.target.value)} />
-                  <span></span>
-                  <button onClick ={() => {
-                    item.review = editedReview
-                    item.rate = rate
-                    setEditable(false)
-                  }}>수정하기</button>
-                  <button onClick ={() => setEditable(false)}>취소</button>
-                </div>)}
+                {editable && item.id === editId &&
+                  (<div className="review-item-edit">
+                    <span></span>
+                    <div style={{ cursor: "pointer" }}>
+                      {[...Array(5)].map((_, index) => (
+                        <FaStar
+                          key={index}
+                          size={15} // 별 크기
+                          color={index < editRate ? "gold" : "lightgray"} // 선택 여부에 따른 색상
+                          onClick={() => setEditRate(index + 1)} // 클릭 이벤트
+                        />
+                      ))}
+                    </div>
+                    <input placeholder="리뷰의 내용을 입력해주세요" value={editedReview} onChange={(e) => setEditedReview(e.target.value)} />
+                    <span></span>
+                    <button onClick={() => {
+                      item.review = editedReview
+                      item.rate = editRate
+                      setEditable(false)
+                    }}>수정하기</button>
+                    <button onClick={() => setEditable(false)}>취소</button>
+                  </div>)}
               </li>
             )
           }
