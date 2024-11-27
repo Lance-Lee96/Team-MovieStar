@@ -212,13 +212,15 @@ const MovieDetail = () => {
         <div className="detail-header">
           <div>
             <h1>{movie.title}</h1>
-            <span>
-              <strong>개봉일:</strong> {movie.release_date}
-            </span>
-            <span>
-              <strong>평점:</strong> {movie.vote_average}
-            </span>
-            <p>{movie.overview}</p>
+            <div className="detail-information">
+              <span>
+                <strong>개봉일:</strong> {movie.release_date}
+              </span>
+              <span>
+                <strong>평점:</strong> {movie.vote_average}
+              </span>
+            </div>
+            <p className="detail-overview">{movie.overview}</p>
 
             <p>
               <strong>유저 평점: </strong> {averageRating}
