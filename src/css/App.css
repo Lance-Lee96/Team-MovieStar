@@ -169,26 +169,26 @@ input {
 
 /* 상세 페이지 스타일 */
 .movie-detail {
-  padding: 40px;
   text-align: center;
   background-color: #121212;
   color: white;
   min-height: 100vh;
 }
 
-.movie-detail-image {
-  max-width: 400px;
-  margin: 20px auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+.detail-container {
+  padding: 40px;
+  width: 40%;
+  margin-left: 10%;
+  background: linear-gradient(to right, rgba(12,12,12,1), rgba(12,12,12,0));
+  height: 100vh;
 }
 
-.movie-detail h2 {
+.detail-container h2 {
   font-size: 36px;
   margin-bottom: 20px;
 }
 
-.movie-detail p {
+.detail-container p {
   font-size: 18px;
   line-height: 1.6;
   margin: 10px 0;
@@ -221,9 +221,11 @@ input {
 .review-form {
   margin: 20px 0;
   text-align: center;
+  flex-direction: row;
 }
 
 .review-input {
+  float: left;
   width: 80%;
   margin: 10px 0;
   padding: 10px;
@@ -231,7 +233,8 @@ input {
 }
 
 .review-submit-button {
-  padding: 10px 20px;
+  padding: 9px 20px;
+  margin-top: 9px;
   font-size: 16px;
   background-color: #4caf50;
   color: white;
@@ -246,7 +249,10 @@ input {
 
 /* ReviewList 스타일 */
 .review-list {
+  margin: 0;
+  padding: 0;
   margin-top: 20px;
+  list-style-type: none;
 }
 
 .review-item-container {
@@ -310,5 +316,6 @@ input {
 /* StarRating 공용 스타일 */
 .star-rating {
   display: flex;
-  gap: 5px;
+  gap: 2px;
+  margin-left: 10px;
 }
