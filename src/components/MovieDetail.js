@@ -6,14 +6,15 @@ import moment from "moment";
 import "../css/App.css";
 
 // 별점 컴포넌트
-const StarRating = ({ rating, setRating, size = 30 }) => (
+const StarRating = ({ rating, setRating, size = 30, readOnly }) => (
   <div className="star-rating" style={{ cursor: "pointer" }}>
     {[...Array(5)].map((_, index) => (
       <FaStar
         key={index}
         size={size}
         color={index < rating ? "gold" : "lightgray"}
-        onClick={() => setRating(index + 1)}
+        onClick={readOnly ? () => { } : () => setRating(index + 1)}
+        style={readOnly ? { pointerEvents: "none", } : {}}
       />
     ))}
   </div>
@@ -49,7 +50,7 @@ const ReviewItem = ({
   <li className="review-item">
     <div className="review-item-container">
       <span className="review-user">{item.user}</span>
-      <StarRating rating={item.rate} size={15} />
+      <StarRating rating={item.rate} size={15} readOnly />
       <span className="review-text">{item.review}</span>
       <span className="review-date">{item.date}</span>
       <button className="review-edit-button" onClick={() => onEdit(item)}>
@@ -116,6 +117,13 @@ const ReviewList = ({
   </ul>
 );
 
+// 평균 평점 계산 함수
+const calculateAverageRating = (reviews) => {
+  if (reviews.length === 0) return 0;
+  const total = reviews.reduce((acc, cur) => acc + cur.rate, 0);
+  return (total / reviews.length).toFixed(2); // 소수점 2자리까지 표시
+};
+
 // 메인 MovieDetail 컴포넌트
 const MovieDetail = () => {
   const { id } = useParams();
@@ -127,6 +135,7 @@ const MovieDetail = () => {
   const [reviewList, setReviewList] = useState([]);
   const [editable, setEditable] = useState(false);
   const [editState, setEditState] = useState({ id: -1, rate: 5, review: "" });
+  const averageRating = calculateAverageRating(reviewList)
 
   const addReview = () => {
     const newReview = {
@@ -136,8 +145,13 @@ const MovieDetail = () => {
       review,
       date: moment().format("MM/DD HH:mm"),
     };
+    if (!review) {
+      alert("리뷰 내용을 입력해주세요")
+      return;
+    }
     setReviewList((prev) => [newReview, ...prev]);
     setReview("");
+    setRate(5)
   };
 
   const handleRemove = (id) => {
@@ -180,49 +194,50 @@ const MovieDetail = () => {
     <div
       className="movie-detail"
       style={{
-        background: `linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), 
+        background: `linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), 
         url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})`,
         backgroundSize: "cover",
       }}
     >
-      <button className="back-button" onClick={() => navigate(-1)}>
-        ← 뒤로 가기
-      </button>
-      <div className="detail-header">
-        <img
-          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-          alt={movie.title}
-        />
-        <div>
-          <h1>{movie.title}</h1>
-          <p>{movie.overview}</p>
-          <p>
-            <strong>Release Date:</strong> {movie.release_date}
-          </p>
-          <p>
-            <strong>Rating:</strong> {movie.vote_average}
-          </p>
+      <div className="detail-container">
+        <button className="back-button" onClick={() => navigate(-1)}>
+          ← 뒤로 가기
+        </button>
+        <div className="detail-header">
+          <div>
+            <h1>{movie.title}</h1>
+            <p>{movie.overview}</p>
+            <p>
+              <strong>Release Date:</strong> {movie.release_date}
+            </p>
+            <p>
+              <strong>Rating:</strong> {movie.vote_average}
+            </p>
+            <p>
+              <strong>유저 평점: </strong> {averageRating}
+            </p>
+          </div>
         </div>
+        <ReviewForm
+          rate={rate}
+          setRate={setRate}
+          review={review}
+          setReview={setReview}
+          addReview={addReview}
+        />
+        <ReviewList
+          reviews={reviewList}
+          onEdit={handleEdit}
+          onRemove={handleRemove}
+          editable={editable}
+          editState={{
+            ...editState,
+            setEditState,
+          }}
+          updateReview={updateReview}
+          cancelEdit={cancelEdit}
+        />
       </div>
-      <ReviewForm
-        rate={rate}
-        setRate={setRate}
-        review={review}
-        setReview={setReview}
-        addReview={addReview}
-      />
-      <ReviewList
-        reviews={reviewList}
-        onEdit={handleEdit}
-        onRemove={handleRemove}
-        editable={editable}
-        editState={{
-          ...editState,
-          setEditState,
-        }}
-        updateReview={updateReview}
-        cancelEdit={cancelEdit}
-      />
     </div>
   );
 };
