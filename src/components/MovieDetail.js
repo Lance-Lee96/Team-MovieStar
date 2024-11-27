@@ -70,6 +70,7 @@ const ReviewItem = ({
           size={15}
         />
         <input
+          type="text"
           className="review-edit-input"
           placeholder="리뷰 내용을 입력해주세요"
           value={editState.review}
@@ -125,11 +126,8 @@ const calculateAverageRating = (reviews) => {
 };
 
 // 메인 MovieDetail 컴포넌트
-const MovieDetail = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+const MovieDetail = ({ movie, onClose }) => {
 
-  const [movie, setMovie] = useState(null);
   const [rate, setRate] = useState(5);
   const [review, setReview] = useState("");
   const [reviewList, setReviewList] = useState([]);
@@ -186,67 +184,61 @@ const MovieDetail = () => {
     setEditState({ id: -1, rate: 5, review: "" });
   };
 
-  useEffect(() => {
-    const getMovieDetails = async () => {
-      const movieDetails = await fetchMovieDetails(id);
-      setMovie(movieDetails);
-    };
-    getMovieDetails();
-  }, [id]);
-
   if (!movie) return <div>Loading...</div>;
 
   return (
     <div
-      className="movie-detail"
-      style={{
-        background: `linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), 
-        url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})`,
-        backgroundSize: "cover",
-      }}
+      className="modal-overlay open"
+      onClick={onClose}
     >
-      <div className="detail-container">
-        <button className="back-button" onClick={() => navigate(-1)}>
-          ← 뒤로 가기
-        </button>
-        <div className="detail-header">
-          <div>
-            <h1>{movie.title}</h1>
-            <div className="detail-information">
-              <span>
-                <strong>개봉일:</strong> {movie.release_date}
-              </span>
-              <span>
-                <strong>평점:</strong> {movie.vote_average}
-              </span>
-            </div>
-            <p className="detail-overview">{movie.overview}</p>
+      <div
+        className="modal-content"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button className="modal-close" onClick={onClose}>X</button>
+        <div className="detail-container">
+        
+          <div className="movie-detail-header">
+            <div>
+              <h1>{movie.title}</h1>
+              <div className="detail-information">
+                <span>
+                  <strong>개봉일:</strong> {movie.release_date}
+                </span>
+                <span>
+                  <strong>평점:</strong> {movie.vote_average}
+                </span>
+              </div>
+              <p className="detail-overview">{movie.overview}</p>
 
-            <p>
-              <strong>유저 평점: </strong> {averageRating}
-            </p>
+              <p>
+                <strong>유저 평점: </strong> {averageRating}
+              </p>
+            </div>
           </div>
+          <ReviewForm
+            rate={rate}
+            setRate={setRate}
+            review={review}
+            setReview={setReview}
+            addReview={addReview}
+          />
+          <h3>사용자 평</h3>
+          {reviewList.length === 0 ? <p>등록된 리뷰가 없습니다</p> :
+            <ReviewList
+              reviews={reviewList}
+              onEdit={handleEdit}
+              onRemove={handleRemove}
+              editable={editable}
+              editState={{
+                ...editState,
+                setEditState,
+              }}
+              updateReview={updateReview}
+              cancelEdit={cancelEdit}
+            />
+          }
         </div>
-        <ReviewForm
-          rate={rate}
-          setRate={setRate}
-          review={review}
-          setReview={setReview}
-          addReview={addReview}
-        />
-        <h3>사용자 평</h3>
-        <ReviewList
-          reviews={reviewList}
-          onEdit={handleEdit}
-          onRemove={handleRemove}
-          editable={editable}
-          editState={{
-            ...editState,
-            setEditState,
-          }}
-          updateReview={updateReview}
-          cancelEdit={cancelEdit}
-        />
       </div>
     </div>
   );
