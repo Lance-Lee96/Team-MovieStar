@@ -5,67 +5,187 @@ import { FaStar } from "react-icons/fa";
 import moment from "moment";
 import "../css/App.css";
 
-// 영화 상세 정보 페이지
+// 별점 컴포넌트
+const StarRating = ({ rating, setRating, size = 30 }) => (
+  <div className="star-rating" style={{ cursor: "pointer" }}>
+    {[...Array(5)].map((_, index) => (
+      <FaStar
+        key={index}
+        size={size}
+        color={index < rating ? "gold" : "lightgray"}
+        onClick={() => setRating(index + 1)}
+      />
+    ))}
+  </div>
+);
+
+// 리뷰 작성 폼 컴포넌트
+const ReviewForm = ({ rate, setRate, review, setReview, addReview }) => (
+  <div className="review-form">
+    <h3>리뷰 작성</h3>
+    <StarRating rating={rate} setRating={setRate} />
+    <input
+      className="review-input"
+      placeholder="리뷰 내용을 입력해주세요"
+      value={review}
+      onChange={(e) => setReview(e.target.value)}
+    />
+    <button className="review-submit-button" onClick={addReview}>
+      올리기
+    </button>
+  </div>
+);
+
+// 리뷰 아이템 컴포넌트
+const ReviewItem = ({
+  item,
+  onEdit,
+  onRemove,
+  editable,
+  editState,
+  updateReview,
+  cancelEdit,
+}) => (
+  <li className="review-item">
+    <div className="review-item-container">
+      <span className="review-user">{item.user}</span>
+      <StarRating rating={item.rate} size={15} />
+      <span className="review-text">{item.review}</span>
+      <span className="review-date">{item.date}</span>
+      <button className="review-edit-button" onClick={() => onEdit(item)}>
+        수정
+      </button>
+      <button className="review-delete-button" onClick={() => onRemove(item.id)}>
+        삭제
+      </button>
+    </div>
+    {editable && editState.id === item.id && (
+      <div className="review-edit-form">
+        <StarRating
+          rating={editState.rate}
+          setRating={(newRate) =>
+            editState.setEditState((prev) => ({ ...prev, rate: newRate }))
+          }
+          size={15}
+        />
+        <input
+          className="review-edit-input"
+          placeholder="리뷰 내용을 입력해주세요"
+          value={editState.review}
+          onChange={(e) =>
+            editState.setEditState((prev) => ({
+              ...prev,
+              review: e.target.value,
+            }))
+          }
+        />
+        <button className="review-update-button" onClick={updateReview}>
+          수정하기
+        </button>
+        <button className="review-cancel-button" onClick={cancelEdit}>
+          취소
+        </button>
+      </div>
+    )}
+  </li>
+);
+
+// 리뷰 리스트 컴포넌트
+const ReviewList = ({
+  reviews,
+  onEdit,
+  onRemove,
+  editable,
+  editState,
+  updateReview,
+  cancelEdit,
+}) => (
+  <ul className="review-list">
+    {reviews.map((item) => (
+      <ReviewItem
+        key={item.id}
+        item={item}
+        onEdit={onEdit}
+        onRemove={onRemove}
+        editable={editable}
+        editState={editState}
+        updateReview={updateReview}
+        cancelEdit={cancelEdit}
+      />
+    ))}
+  </ul>
+);
+
+// 메인 MovieDetail 컴포넌트
 const MovieDetail = () => {
-  const { id } = useParams(); // URL에서 영화 ID 가져오기
-  const [movie, setMovie] = useState(null); // 영화 상세 데이터 상태
-  const [rate, setRate] = useState('5')
-  const [review, setReview] = useState("")
-  const [reviewList, setReviewList] = useState([])
-  const [editable, setEditable] = useState(false)
-  const [editId, setEditId] = useState(-1)
-  const [editRate, setEditRate] = useState(5)
-  const [editedReview, setEditedReview] = useState("")
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // 뒤로가기 버튼 처리를 위한 네비게이션
+  const [movie, setMovie] = useState(null);
+  const [rate, setRate] = useState(5);
+  const [review, setReview] = useState("");
+  const [reviewList, setReviewList] = useState([]);
+  const [editable, setEditable] = useState(false);
+  const [editState, setEditState] = useState({ id: -1, rate: 5, review: "" });
 
-  const buttonHandle = () => {
+  const addReview = () => {
     const newReview = {
       id: reviewList.length + 1,
       user: "유저 이름",
-      rate: Number(rate),
-      review: review,
-      date: moment().format('MM/DD HH:mm')
-    }
-    setReviewList(prev => [newReview, ...prev])
-    setReview("")
-  }
+      rate,
+      review,
+      date: moment().format("MM/DD HH:mm"),
+    };
+    setReviewList((prev) => [newReview, ...prev]);
+    setReview("");
+  };
 
   const handleRemove = (id) => {
-    const newList = reviewList.filter((item) => item.id !== id)
-    setReviewList(newList)
-  }
+    setReviewList((prev) => prev.filter((item) => item.id !== id));
+  };
 
   const handleEdit = (item) => {
-    setEditId(item.id)
-    setEditable(true)
-    setEditedReview(item.review)
-    setEditRate(item.rate)
-    console.log(editId + "/" + editable)
-  }
+    setEditable(true);
+    setEditState({ id: item.id, rate: item.rate, review: item.review });
+  };
 
+  const updateReview = () => {
+    setReviewList((prev) =>
+      prev.map((item) =>
+        item.id === editState.id
+          ? { ...item, rate: editState.rate, review: editState.review }
+          : item
+      )
+    );
+    setEditable(false);
+    setEditState({ id: -1, rate: 5, review: "" });
+  };
 
+  const cancelEdit = () => {
+    setEditable(false);
+    setEditState({ id: -1, rate: 5, review: "" });
+  };
 
   useEffect(() => {
     const getMovieDetails = async () => {
-      const movieDetails = await fetchMovieDetails(id); // API로 영화 상세 정보 가져오기
+      const movieDetails = await fetchMovieDetails(id);
       setMovie(movieDetails);
     };
-
     getMovieDetails();
   }, [id]);
 
-  if (!movie) return <div>Loading...</div>; // 데이터 로딩 중 표시
+  if (!movie) return <div>Loading...</div>;
 
   return (
-    <div className="movie-detail" style={{
-      background: `linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), 
-      url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})`,
-      backgroundSize: 'cover',
-    }}>
-      <button
-        onClick={() => navigate(-1)} // 이전 페이지로 이동
-        className="back-button">
+    <div
+      className="movie-detail"
+      style={{
+        background: `linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), 
+        url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})`,
+        backgroundSize: "cover",
+      }}
+    >
+      <button className="back-button" onClick={() => navigate(-1)}>
         ← 뒤로 가기
       </button>
       <div className="detail-header">
@@ -76,74 +196,33 @@ const MovieDetail = () => {
         <div>
           <h1>{movie.title}</h1>
           <p>{movie.overview}</p>
-          <p><strong>Release Date:</strong> {movie.release_date}</p>
-          <p><strong>Rating:</strong> {movie.vote_average}</p>
+          <p>
+            <strong>Release Date:</strong> {movie.release_date}
+          </p>
+          <p>
+            <strong>Rating:</strong> {movie.vote_average}
+          </p>
         </div>
       </div>
-      <div>
-        <p><strong>리뷰 작성</strong></p>
-        <p>유저 평점: {reviewList.length === 0 ? 0 : (reviewList.reduce((acc, cur) => { return acc + cur.rate }, 0) / reviewList.length).toFixed(2)}</p>
-        <div style={{ cursor: "pointer" }}>
-          {[...Array(5)].map((_, index) => (
-            <FaStar
-              key={index}
-              size={30} // 별 크기
-              color={index < rate ? "gold" : "lightgray"} // 선택 여부에 따른 색상
-              onClick={() => setRate(index + 1)} // 클릭 이벤트
-            />
-          ))}
-        </div>
-        <input placeholder="리뷰의 내용을 입력해주세요" value={review} onChange={(e) => setReview(e.target.value)} />
-        <button onClick={buttonHandle}>올리기</button>
-      </div>
-      <div className="detail-review-list">
-        <ul>
-          {
-            reviewList.map(item =>
-              <li key={item.id} className="review-item">
-                <div className="review-item-container">
-                  <span>{item.user}</span>
-                  <div>
-                    {[...Array(item.rate)].map((_, index) => (
-                      <FaStar
-                        key={index}
-                        size={15}
-                        color={"gold"}
-                      />
-                    ))}
-                  </div>
-                  <span>{item.review}</span>
-                  <span>{item.date}</span>
-                  <button onClick={() => handleEdit(item)}>수정</button>
-                  <button onClick={() => handleRemove(item.id)}>삭제</button>
-                </div>
-                {editable && item.id === editId &&
-                  (<div className="review-item-edit">
-                    <span></span>
-                    <div style={{ cursor: "pointer" }}>
-                      {[...Array(5)].map((_, index) => (
-                        <FaStar
-                          key={index}
-                          size={15} // 별 크기
-                          color={index < editRate ? "gold" : "lightgray"} // 선택 여부에 따른 색상
-                          onClick={() => setEditRate(index + 1)} // 클릭 이벤트
-                        />
-                      ))}
-                    </div>
-                    <input placeholder="리뷰의 내용을 입력해주세요" value={editedReview} onChange={(e) => setEditedReview(e.target.value)} />
-                    <span></span>
-                    <button onClick={() => {
-                      item.review = editedReview
-                      item.rate = editRate
-                      setEditable(false)
-                    }}>수정하기</button>
-                    <button onClick={() => setEditable(false)}>취소</button>
-                  </div>)}
-              </li>
-            )
-          }
-        </ul>
-      </div>
+      <ReviewForm
+        rate={rate}
+        setRate={setRate}
+        review={review}
+        setReview={setReview}
+        addReview={addReview}
+      />
+      <ReviewList
+        reviews={reviewList}
+        onEdit={handleEdit}
+        onRemove={handleRemove}
+        editable={editable}
+        editState={{
+          ...editState,
+          setEditState,
+        }}
+        updateReview={updateReview}
+        cancelEdit={cancelEdit}
+      />
     </div>
   );
 };
