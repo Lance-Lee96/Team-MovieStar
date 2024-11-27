@@ -149,13 +149,17 @@ const MovieDetail = () => {
       alert("리뷰 내용을 입력해주세요")
       return;
     }
-    setReviewList((prev) => [newReview, ...prev]);
-    setReview("");
-    setRate(5)
+    if (window.confirm("등록 하시겠습니까?")) {
+      setReviewList((prev) => [newReview, ...prev]);
+      setReview("");
+      setRate(5)
+    }
   };
 
   const handleRemove = (id) => {
-    setReviewList((prev) => prev.filter((item) => item.id !== id));
+    if (window.confirm("삭제 하시겠습니까?")) {
+      setReviewList((prev) => prev.filter((item) => item.id !== id));
+    }
   };
 
   const handleEdit = (item) => {
@@ -164,15 +168,17 @@ const MovieDetail = () => {
   };
 
   const updateReview = () => {
-    setReviewList((prev) =>
-      prev.map((item) =>
-        item.id === editState.id
-          ? { ...item, rate: editState.rate, review: editState.review }
-          : item
-      )
-    );
-    setEditable(false);
-    setEditState({ id: -1, rate: 5, review: "" });
+    if (window.confirm("수정 하시겠습니까?")) {
+      setReviewList((prev) =>
+        prev.map((item) =>
+          item.id === editState.id
+            ? { ...item, rate: editState.rate, review: editState.review }
+            : item
+        )
+      );
+      setEditable(false);
+      setEditState({ id: -1, rate: 5, review: "" });
+    }
   };
 
   const cancelEdit = () => {
@@ -206,13 +212,14 @@ const MovieDetail = () => {
         <div className="detail-header">
           <div>
             <h1>{movie.title}</h1>
+            <span>
+              <strong>개봉일:</strong> {movie.release_date}
+            </span>
+            <span>
+              <strong>평점:</strong> {movie.vote_average}
+            </span>
             <p>{movie.overview}</p>
-            <p>
-              <strong>Release Date:</strong> {movie.release_date}
-            </p>
-            <p>
-              <strong>Rating:</strong> {movie.vote_average}
-            </p>
+
             <p>
               <strong>유저 평점: </strong> {averageRating}
             </p>
@@ -225,6 +232,7 @@ const MovieDetail = () => {
           setReview={setReview}
           addReview={addReview}
         />
+        <h3>사용자 평</h3>
         <ReviewList
           reviews={reviewList}
           onEdit={handleEdit}
