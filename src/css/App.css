@@ -217,48 +217,98 @@ input {
   outline: none;
 }
 
-
-/* 리뷰 섹션 */
-.detail-review-list {
-  background-color: #1e1e1e;
-  color: #f5f5f5;
-  padding: 20px;
-  border-radius: 8px;
-  overflow-y: auto;
-  max-height: 300px; /* 세로 스크롤 제한 */
+/* ReviewForm 스타일 */
+.review-form {
+  margin: 20px 0;
+  text-align: center;
 }
 
-.review-item{
-  list-style-type: none;
+.review-input {
+  width: 80%;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.review-submit-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.review-submit-button:hover {
+  background-color: #45a049;
+}
+
+/* ReviewList 스타일 */
+.review-list {
+  margin-top: 20px;
 }
 
 .review-item-container {
-  display: grid;
-  grid-template-columns: 1fr 0.5fr 5fr 1fr 0.5fr 0.5fr;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.review-item-edit {
-  display: grid;
-  grid-template-columns: 1fr 0.5fr 5fr 1fr 0.5fr 0.5fr;
+  display: flex;
   align-items: center;
-  height: auto;
-  gap: 10px;
-  padding: 10px 0;
+  justify-content: space-between;
+  padding: 10px;
   border-bottom: 1px solid #ddd;
 }
 
-.review-item-edit button{
-  height: 40px;
+.review-user {
+  font-weight: bold;
 }
 
-.review-item:hover {
-  background-color: #2a2a2a; /* hover 효과 */
+.review-text {
+  flex-grow: 1;
+  margin-left: 10px;
 }
 
-.review-item span {
-  text-align: center;
-  color: #d1d1d1;
+.review-date {
+  font-size: 0.9em;
+  color: gray;
+}
+
+.review-edit-button,
+.review-delete-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.review-edit-button:hover,
+.review-delete-button:hover {
+  background-color: #d32f2f;
+}
+
+.review-edit-form {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.review-edit-input {
+  margin: 0 10px;
+  padding: 5px;
+  flex-grow: 1;
+}
+
+.review-update-button {
+  background-color: #2196f3;
+}
+
+.review-cancel-button {
+  background-color: #555;
+}
+
+/* StarRating 공용 스타일 */
+.star-rating {
+  display: flex;
+  gap: 5px;
 }
