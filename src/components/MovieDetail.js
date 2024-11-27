@@ -197,7 +197,12 @@ const MovieDetail = ({ movie, onClose }) => {
       >
         <button className="modal-close" onClick={onClose}>X</button>
         <div className="detail-container">
-        
+        <img
+            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            alt={movie.title}
+            className="movie-detail-poster"
+          />
+
           <div className="movie-detail-header">
             <div>
               <h1>{movie.title}</h1>
