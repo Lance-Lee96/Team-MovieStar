@@ -189,6 +189,12 @@ input {
   margin-bottom: 10px;
 }
 
+.detail-container p {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+
 .detail-header span{
   font-size: 16px;
   margin-right: 7px;
@@ -196,10 +202,14 @@ input {
   font-weight:bolder
 }
 
-.detail-container p {
-  font-size: 18px;
-  line-height: 1.6;
-  margin: 10px 0;
+.detail-information{
+  padding-bottom: 10px;
+  border-bottom: 1px solid gray;
+}
+
+.detail-overview{
+  padding-bottom: 10px;
+  border-bottom: 1px solid gray;
 }
 
 /* 뒤로 가기 버튼 스타일 */
@@ -267,7 +277,7 @@ input {
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid gray;
 }
 
 .review-user {
