@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .app {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .movie-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .movie-item {
+    margin: 10px;
+    width: 200px;
+  }
+  
+  .movie-item img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .movie-item h3 {
+    font-size: 18px;
+    margin-top: 10px;
+  }
+  
+  input {
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    width: 50%;
+  }
+
+  .main-header {
+    display: flex;
+    justify-content: center; /* 전체적으로 가운데 정렬 */
+    align-items: center; /* 수직 정렬 */
+    position: relative; /* 버튼을 절대 위치로 배치하기 위한 부모 설정 */
+    height: 60px; /* 헤더 높이 */
+  }
+  
+  .main-header h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: bold;
+  }
+  
+  .main-header button {
+    position: absolute; /* 절대 위치 */
+    right: 100px; /* 우측 여백 */
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #d81f26; /* 버튼 색상 */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .main-header button:hover {
+    background-color: #a3151d; /* 호버 시 어두운 색상 */
+  }
+  

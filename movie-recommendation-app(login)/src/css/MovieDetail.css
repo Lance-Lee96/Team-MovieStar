@@ -1,0 +1,9 @@
+.movie-detail img {
+    max-width: 300px;
+    border-radius: 8px;
+  }
+  
+  .movie-detail {
+    text-align: center;
+    margin-top: 20px;
+  }
