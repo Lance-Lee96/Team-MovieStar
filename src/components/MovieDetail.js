@@ -187,59 +187,58 @@ const MovieDetail = ({ movie, onClose }) => {
   if (!movie) return <div>Loading...</div>;
 
 return (
-<div
-  className="modal-overlay"
-  onClick={onClose} /* 모달 외부 클릭 시 닫힘 */
->
-  <div
-    className="modal-content"
-    onClick={(e) => e.stopPropagation()} /* 내부 클릭 시 닫히지 않음 */
-  >
-    <button className="modal-close" onClick={onClose}>
-      &times;
-    </button>
-    <img
-      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-      alt={movie.title}
-      className="modal-movie-poster"
-    />
-    <div className="modal-movie-details">
-      <h1>{movie.title}</h1>
-      <p>{movie.overview}</p>
-      <p><strong>개봉일:</strong> {movie.release_date}</p>
-      <p><strong>평점:</strong> {movie.vote_average}</p>
-      
-      {/* 리뷰 작성 폼 */}
-      <ReviewForm
-        rate={rate}
-        setRate={setRate}
-        review={review}
-        setReview={setReview}
-        addReview={addReview}
-      />
+<div className="modal-overlay" onClick={onClose}>
+<div className="modal-content" onClick={(e) => e.stopPropagation()}>
+  <button className="modal-close" onClick={onClose}>
+    &times;
+  </button>
+  <img
+    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+    alt={movie.title}
+    className="modal-movie-poster"
+  />
+  <div className="modal-movie-details">
+    <h1>{movie.title}</h1>
+    <p>{movie.overview}</p>
+    <p><strong>개봉일:</strong> {movie.release_date}</p>
+    <p><strong>평점:</strong> {movie.vote_average}</p>
 
-      {/* 사용자 리뷰 리스트 */}
-      <h3>사용자 리뷰</h3>
-      <strong>유저 평점: </strong> {averageRating}
-      {reviewList.length === 0 ? (
-        <p>등록된 리뷰가 없습니다.</p>
-      ) : (
-        <ReviewList
-          reviews={reviewList}
-          onEdit={handleEdit}
-          onRemove={handleRemove}
-          editable={editable}
-          editState={{
-            ...editState,
-            setEditState,
-          }}
-          updateReview={updateReview}
-          cancelEdit={cancelEdit}
-        />
-      )}
-    </div>
+    {/* 리뷰 작성 폼 */}
+    <ReviewForm
+      rate={rate}
+      setRate={setRate}
+      review={review}
+      setReview={setReview}
+      addReview={addReview}
+    />
+
+    {/* 사용자 리뷰 */}
+    <h3>사용자 리뷰</h3>
+    <strong>유저 평점: </strong> {averageRating}
+    {reviewList.length === 0 ? (
+      <p>등록된 리뷰가 없습니다.</p>
+    ) : (
+      <ReviewList
+        reviews={reviewList}
+        onEdit={handleEdit}
+        onRemove={handleRemove}
+        editable={editable}
+        editState={{
+          ...editState,
+          setEditState,
+        }}
+        updateReview={updateReview}
+        cancelEdit={cancelEdit}
+      />
+    )}
+
+    {/* 하단 여백 확보 */}
+    <div style={{ height: '20px' }}></div>
   </div>
 </div>
+
+</div>
+
 );
 };
 

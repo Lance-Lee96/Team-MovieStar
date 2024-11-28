@@ -353,66 +353,87 @@ input {
 }
 
 .modal-content {
-  background: #1e1e1e; /* 다크 배경 */
-  color: #fff; /* 텍스트 색상 */
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* 포스터와 상세정보 비율 */
+  gap: 20px;
   padding: 20px;
-  display: flex;
   border-radius: 10px;
-  max-width: 80%; /* 최대 너비 */
-  height: 70vh;
-  padding: 0;
-  overflow: hidden;
-  width: 90%; /* 화면 크기에 따라 반응형 */
-  max-height: 80%; /* 최대 높이 */
-  overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
-  position: relative;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+  width: 70%; /* 너비를 적절히 설정 */
+  max-width: 800px; /* 최대 너비 제한 */
+  height: auto; /* 높이를 자동으로 설정 */
+  max-height: none; /* 높이 제한 해제 */
+  position: relative; /* 닫기 버튼과 정렬을 위해 */
 }
-
-.modal-movie-poster {
-  width: 40%; /* 포스터 너비 */
-  object-fit: cover;
-}
-
-.modal-movie-details {
-  width: 60%; /* 상세 정보 너비 */
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow-y: auto;
-}
-
 
 .modal-close {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 15px;
+  right: 15px;
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 25px;
   color: #fff;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.2s ease-in-out;
+  z-index: 10; /* 모달 내부에서 상단 레이어 */
 }
 
 .modal-close:hover {
-  transform: scale(1.2);
+  transform: scale(1.2); /* 닫기 버튼 호버 효과 */
 }
 
-.modal-content img {
-  max-width: 100%; /* 이미지 크기 제한 */
+
+.modal-movie-poster {
+  width: 100%;
   border-radius: 10px;
-  margin: 10px 0;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  flex-direction: column;
+  display: flex;
+  gap: 15px;
 }
 
-.modal-content h1 {
-  font-size: 28px;
+.modal-movie-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* 상세정보 간 간격 */
+}
+
+.modal-movie-details h1 {
+  font-size: 2rem;
   margin-bottom: 10px;
 }
 
-.modal-content p {
-  font-size: 16px;
+.modal-movie-details p {
+  font-size: 1rem;
   line-height: 1.6;
-  margin-bottom: 10px;
+  margin: 5px 0;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.review-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 반응형 리뷰 그리드 */
+  gap: 15px;
+}
+
+.review-item-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #2b2b2b;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.review-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
