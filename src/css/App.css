@@ -361,7 +361,9 @@ input {
   width: 70%; /* 너비를 적절히 설정 */
   max-width: 800px; /* 최대 너비 제한 */
   height: auto; /* 높이를 자동으로 설정 */
-  max-height: none; /* 높이 제한 해제 */
+  max-height: 80vh; /* 높이 제한 해제 */
+  overflow-y: auto;
+  scrollbar-width: none;
   position: relative; /* 닫기 버튼과 정렬을 위해 */
 }
 
