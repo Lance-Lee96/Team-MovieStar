@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { AppContext } from "../AppContext";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchPopularMovies, searchMovies } from "../api/tmdb";
 import "../css/MainScreen.css"
@@ -34,6 +35,7 @@ const MovieList = ({ movies, onSearch }) => {
 const MainScreen = () => {
   const [movies, setMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const { user, setUser } = useContext(AppContext)
 
   // 인기 영화 가져오기
   useEffect(() => {
@@ -58,15 +60,28 @@ const MainScreen = () => {
   };
 
   const navigate = useNavigate()
+
+  //로그인 버튼 클릭 시 LoginScreen으로 이동
   const navigateToLoginScreen = () => {
     navigate("/login")
+  }
+
+  //로그아웃 버튼 클릭 시
+  const handleLogout = () => {
+    setUser(null) // 사용자 로그아웃 처리
+    navigate("/login") // 다시 LoginScreen으로 이동(로그인버튼 확인하고싶으면 이부분 주석처리하고 확인해보기) 
   }
 
   return (
     <div className="app">
       <div className="main-header">
         <h1>영화 추천</h1>
-        <button onClick={navigateToLoginScreen}>로그인</button>
+        {/* 로그인하면 로그아웃버튼으로, 로그아웃하면 로그인버튼으로 */}
+        { user ? (
+          <button onClick={handleLogout}>로그아웃</button>
+        ) : (
+          <button onClick={navigateToLoginScreen}>로그인</button>
+        )}
       </div>
       <MovieList movies={movies} onSearch={handleSearch} />
     </div>

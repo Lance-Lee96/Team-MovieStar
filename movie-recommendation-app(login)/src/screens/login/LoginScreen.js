@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
+import { AppContext } from "../../AppContext"
 import { Link, useNavigate } from "react-router-dom"
 import "../../css/LoginScreen.css"
 import axios from "axios"
@@ -6,6 +7,7 @@ import axios from "axios"
 const LoginScreen = () => {
     const [formData, setFormData] = useState({ username: "", password: "" })
     const [error, setError] = useState("")
+    const { setUser } = useContext(AppContext)
     const navigate = useNavigate()
 
   // const handleLogin = async () => {
@@ -38,9 +40,14 @@ const LoginScreen = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
     // 유저 정보 확인
-    if (storedUser && storedUser.username === formData.username && storedUser.password === formData.password) {
-      // 로그인 성공 시 MainScreen으로 이동
-      navigate("/");
+    if (
+      storedUser && 
+      storedUser.username === formData.username && 
+      storedUser.password === formData.password
+    ) {
+      // 로그인 성공 시
+      setUser({ username: formData.username}) // 사용자 정보를 Context에 저장
+      navigate("/"); // MainScreen으로 이동
     } else {
       // 에러 메시지 출력
       setError("아이디 또는 비밀번호가 일치하지 않습니다.");
