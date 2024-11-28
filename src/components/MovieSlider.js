@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
-import "../css/App.css";
 import { useNavigate } from "react-router-dom";
+
+import "../css/main/Slider.css"
 
 const MovieSlider = ({ title, movies, onMovieSelect }) => {
   // 슬라이더 참조를 위한 ref 생성
