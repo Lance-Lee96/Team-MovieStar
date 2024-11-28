@@ -356,14 +356,33 @@ input {
   background: #1e1e1e; /* 다크 배경 */
   color: #fff; /* 텍스트 색상 */
   padding: 20px;
+  display: flex;
   border-radius: 10px;
-  max-width: 600px; /* 최대 너비 */
+  max-width: 80%; /* 최대 너비 */
+  height: 70vh;
+  padding: 0;
+  overflow: hidden;
   width: 90%; /* 화면 크기에 따라 반응형 */
   max-height: 80%; /* 최대 높이 */
   overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
   position: relative;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
 }
+
+.modal-movie-poster {
+  width: 40%; /* 포스터 너비 */
+  object-fit: cover;
+}
+
+.modal-movie-details {
+  width: 60%; /* 상세 정보 너비 */
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+}
+
 
 .modal-close {
   position: absolute;

@@ -6,7 +6,7 @@ import MovieSlider from "./components/MovieSlider.js";
 import "./css/App.css";
 
 // 최상단 추천 영화 섹션 - 자동으로 슬라이딩되는 배너 컴포넌트
-const TopRecommendation = ({ movies }) => {
+const TopRecommendation = ({ movies,onMovieSelect  }) => {
   // 현재 보여줄 영화의 인덱스 상태 관리
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -34,6 +34,7 @@ const TopRecommendation = ({ movies }) => {
           className={`top-recommendation ${
             index === currentIndex ? "active" : "inactive"
           }`}
+          onClick={() => onMovieSelect(movie)} // 영화 클릭 시 모달 오픈
         >
           {/* 영화 배경 이미지 */}
           <img
@@ -125,7 +126,10 @@ const HomePage = () => {
       ) : (
         <>
           {/* 추천 섹션 및 다양한 카테고리 영화 슬라이더 */}
-          <TopRecommendation movies={popularMovies} />
+          <TopRecommendation 
+            movies={popularMovies} 
+            onMovieSelect={handleMovieSelect} 
+          />
           <MovieSlider 
             title="인기 영화" 
             movies={popularMovies} 
