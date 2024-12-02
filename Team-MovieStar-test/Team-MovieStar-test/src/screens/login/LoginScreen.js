@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react"
 import { AppContext } from "../../context/AppContext"
 import { Link, useNavigate } from "react-router-dom"
 import "../../css/login/LoginScreen.css"
+import logo from "../../logo/logo.png"
 import axios from "axios"
 
 const LoginScreen = () => {
@@ -25,6 +26,11 @@ const LoginScreen = () => {
   // const handleSocialLogin = (provider) => {
   //   window.location.href = `/oauth2/authorization/${provider}`
   // }
+
+  // 로고 클릭 시 메인화면 띄우기
+  const handleLogoClick = () => {
+    navigate("/home")
+  }
 
   // 입력값 업데이트
   const handleChange = (e) => {
@@ -56,6 +62,9 @@ const LoginScreen = () => {
 
   return (
     <div className="login-container">
+      <div className="logo-box">
+        <img src={logo} className="loginLogo" onClick={handleLogoClick}/>
+      </div>
       <div className="login-box">
         <h2>로그인</h2>
 
