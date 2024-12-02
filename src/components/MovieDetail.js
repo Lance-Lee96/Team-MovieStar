@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchMovieDetails } from "../api/tmdb";
 import { FaStar } from "react-icons/fa";
 import moment from "moment";
 import "../css/App.css";
+import "../css/detail/Detail.css"
+import "../css/detail/Review.css"
+import "../css/detail/Modal.css"
+import { AppContext } from "../context/AppContext";
 
 // 별점 컴포넌트
 const StarRating = ({ rating, setRating, size = 30, readOnly }) => (
@@ -48,6 +52,7 @@ const ReviewItem = ({
   editState,
   updateReview,
   cancelEdit,
+  username
 }) => (
   <li className="review-item">
     <div className="review-item-container">
@@ -55,6 +60,7 @@ const ReviewItem = ({
       <StarRating rating={item.rate} size={15} readOnly />
       <span className="review-text">{item.review}</span>
       <span className="review-date">{item.date}</span>
+<<<<<<< HEAD
       <div className="review-actions">
         <button className="review-edit-button" onClick={() => onEdit(item)}>
           수정
@@ -63,6 +69,18 @@ const ReviewItem = ({
           삭제
         </button>
       </div>
+=======
+      {username === item.user && (
+        <div className="review-actions">
+          <button className="review-edit-button" onClick={() => onEdit(item)}>
+            수정
+          </button>
+          <button className="review-delete-button" onClick={() => onRemove(item.id)}>
+            삭제
+          </button>
+        </div>
+      )}
+>>>>>>> f7bd009758018c9b3f9721174a3be4c8583f31ff
     </div>
     {editable && editState.id === item.id && (
       <div className="review-edit-form">
@@ -97,30 +115,30 @@ const ReviewItem = ({
 );
 
 // 리뷰 리스트 컴포넌트
-const ReviewList = ({
-  reviews,
-  onEdit,
-  onRemove,
-  editable,
-  editState,
-  updateReview,
-  cancelEdit,
-}) => (
-  <ul className="review-list">
-    {reviews.map((item) => (
-      <ReviewItem
-        key={item.id}
-        item={item}
-        onEdit={onEdit}
-        onRemove={onRemove}
-        editable={editable}
-        editState={editState}
-        updateReview={updateReview}
-        cancelEdit={cancelEdit}
-      />
-    ))}
-  </ul>
-);
+// const ReviewList = ({
+//   reviews,
+//   onEdit,
+//   onRemove,
+//   editable,
+//   editState,
+//   updateReview,
+//   cancelEdit,
+// }) => (
+//   <ul className="review-list">
+//     {reviews.map((item) => (
+//       <ReviewItem
+//         key={item.id}
+//         item={item}
+//         onEdit={onEdit}
+//         onRemove={onRemove}
+//         editable={editable}
+//         editState={editState}
+//         updateReview={updateReview}
+//         cancelEdit={cancelEdit}
+//       />
+//     ))}
+//   </ul>
+// );
 
 // 평균 평점 계산 함수
 const calculateAverageRating = (reviews) => {
@@ -137,13 +155,22 @@ const MovieDetail = ({ movie, onClose }) => {
   const [editable, setEditable] = useState(false);
   const [visibleReviews, setVisibleReviews] = useState(3);
   const [editState, setEditState] = useState({ id: -1, rate: 5, review: "" });
+<<<<<<< HEAD
   
+=======
+  const { user } = useContext(AppContext)
+
+>>>>>>> f7bd009758018c9b3f9721174a3be4c8583f31ff
   const averageRating = calculateAverageRating(reviewList);
 
   const addReview = () => {
+    if(!user){
+      alert("로그인한 유저만 리뷰를 등록 가능합니다")
+      return;
+    }
     const newReview = {
       id: reviewList.length + 1,
-      user: "유저 이름",
+      user: user.username,
       rate,
       review,
       date: moment().format("MM/DD HH:mm"),
@@ -228,6 +255,7 @@ const MovieDetail = ({ movie, onClose }) => {
           {/* 사용자 리뷰 */}
           <h3>사용자 리뷰</h3>
           <strong>유저 평점: </strong> {averageRating}
+<<<<<<< HEAD
           
           {reviewList.length === 0 ? (
             <p>등록된 리뷰가 없습니다.</p>
@@ -264,6 +292,45 @@ const MovieDetail = ({ movie, onClose }) => {
             </>
           )}
 
+=======
+
+          {reviewList.length === 0 ? (
+            <p>등록된 리뷰가 없습니다.</p>
+          ) : (
+            <>
+              <ul className="review-list">
+                {reviewList.slice(0, visibleReviews).map((item) => (
+                  <ReviewItem
+                    key={item.id}
+                    item={item}
+                    onEdit={handleEdit}
+                    onRemove={handleRemove}
+                    editable={editable}
+                    editState={{
+                      ...editState,
+                      setEditState,
+                    }}
+                    updateReview={updateReview}
+                    cancelEdit={cancelEdit}
+                    username={user.username}
+                  />
+                ))}
+              </ul>
+
+              {visibleReviews < reviewList.length && (
+                <div className="load-more-container">
+                  <button
+                    className="load-more-button"
+                    onClick={loadMoreReviews}
+                  >
+                    더보기 ({visibleReviews} / {reviewList.length})
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+
+>>>>>>> f7bd009758018c9b3f9721174a3be4c8583f31ff
           {/* 하단 여백 확보 */}
           <div style={{ height: '20px' }}></div>
         </div>
