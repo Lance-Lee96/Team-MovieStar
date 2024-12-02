@@ -4,9 +4,9 @@ import "../../css/login/LoginScreen.css"
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: ""
+    userEmail: "",
+    userPwd: "",
+    userPwdCheck: ""
   })
 
   const [message, setMessage] = useState("")
@@ -22,17 +22,17 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // 서버 요청 또는 로직 추가
-    if(!formData.email){
+    if(!formData.userEmail){
       setMessage("이메일을 입력해주세요.");
-    } else if(!formData.password){
+    } else if(!formData.userPwd){
       setMessage("비밀번호를 입력해주세요.");
-    } else if(formData.password !== formData.confirmPassword){
+    } else if(formData.userPwd !== formData.userPwdCheck){
       setMessage("비밀번호가 일치하지 않습니다.")
     } else{
       // 회원가입 정보를 localStorage에 저장
       const newUser = {
-        username: formData.email,
-        password: formData.password,
+        username: formData.userEmail,
+        password: formData.userPwd,
       };
       localStorage.setItem("user", JSON.stringify(newUser));
 
@@ -55,34 +55,34 @@ const Signup = () => {
           required
         /> */}
 
-        <label htmlFor="email">이메일(ID)</label>
+        <label htmlFor="userEmail">이메일(ID)</label>
         <input
           type="text"
-          id="email"
-          name="email"
-          value={formData.email}
+          id="userEmail"
+          name="userEmail"
+          value={formData.userEmail}
           onChange={handleChange}
           placeholder="이메일을 입력하세요"
           required
         />
 
-        <label htmlFor="password">비밀번호</label>
+        <label htmlFor="userPwd">비밀번호</label>
         <input
           type="password"
-          id="password"
-          name="password"
-          value={formData.password}
+          id="userPwd"
+          name="userPwd"
+          value={formData.userPwd}
           onChange={handleChange}
           placeholder="비밀번호를 입력하세요"
           required
         />
 
-        <label htmlFor="confirmPassword">비밀번호 확인</label>
+        <label htmlFor="userPwdCheck">비밀번호 확인</label>
         <input
           type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          value={formData.confirmPassword}
+          id="userPwdCheck"
+          name="userPwdCheck"
+          value={formData.userPwdCheck}
           onChange={handleChange}
           placeholder="비밀번호를 다시 입력하세요"
           required
