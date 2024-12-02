@@ -47,7 +47,7 @@ const LoginScreen = () => {
     ) {
       // 로그인 성공 시
       setUser({ username: formData.username}) // 사용자 정보를 Context에 저장
-      navigate("/"); // MainScreen으로 이동
+      navigate("/home"); // MainScreen으로 이동
     } else {
       // 에러 메시지 출력
       setError("아이디 또는 비밀번호가 일치하지 않습니다.");
