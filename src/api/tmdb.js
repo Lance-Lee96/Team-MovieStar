@@ -70,3 +70,15 @@ export const fetchTopRatedMovies = async () => {
     return [];
   }
 };
+
+
+//출연진 목록을 가져오는 함수
+export const actor = async (movieId) => {
+  try {
+    const response = await instance.get(`/movie/${movieId}/credits`);
+    return response.data.results;
+  } catch (error) {
+    console.error("Error fetching movies credit:", error);
+    return [];
+  }
+};
