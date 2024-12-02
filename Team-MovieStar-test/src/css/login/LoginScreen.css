@@ -5,7 +5,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #121212; /* 어두운 배경 */
+  background-color: black; /* 어두운 배경 */
   color: #f5f5f5; /* 밝은 텍스트 */
 }
 
