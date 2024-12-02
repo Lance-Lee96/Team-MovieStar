@@ -60,16 +60,6 @@ const ReviewItem = ({
       <StarRating rating={item.rate} size={15} readOnly />
       <span className="review-text">{item.review}</span>
       <span className="review-date">{item.date}</span>
-<<<<<<< HEAD
-      <div className="review-actions">
-        <button className="review-edit-button" onClick={() => onEdit(item)}>
-          수정
-        </button>
-        <button className="review-delete-button" onClick={() => onRemove(item.id)}>
-          삭제
-        </button>
-      </div>
-=======
       {username === item.user && (
         <div className="review-actions">
           <button className="review-edit-button" onClick={() => onEdit(item)}>
@@ -80,7 +70,6 @@ const ReviewItem = ({
           </button>
         </div>
       )}
->>>>>>> f7bd009758018c9b3f9721174a3be4c8583f31ff
     </div>
     {editable && editState.id === item.id && (
       <div className="review-edit-form">
@@ -155,12 +144,8 @@ const MovieDetail = ({ movie, onClose }) => {
   const [editable, setEditable] = useState(false);
   const [visibleReviews, setVisibleReviews] = useState(3);
   const [editState, setEditState] = useState({ id: -1, rate: 5, review: "" });
-<<<<<<< HEAD
-  
-=======
   const { user } = useContext(AppContext)
 
->>>>>>> f7bd009758018c9b3f9721174a3be4c8583f31ff
   const averageRating = calculateAverageRating(reviewList);
 
   const addReview = () => {
@@ -255,44 +240,6 @@ const MovieDetail = ({ movie, onClose }) => {
           {/* 사용자 리뷰 */}
           <h3>사용자 리뷰</h3>
           <strong>유저 평점: </strong> {averageRating}
-<<<<<<< HEAD
-          
-          {reviewList.length === 0 ? (
-            <p>등록된 리뷰가 없습니다.</p>
-          ) : (
-            <>
-              <ul className="review-list">
-                {reviewList.slice(0, visibleReviews).map((item) => (
-                  <ReviewItem
-                    key={item.id}
-                    item={item}
-                    onEdit={handleEdit}
-                    onRemove={handleRemove}
-                    editable={editable}
-                    editState={{
-                      ...editState,
-                      setEditState,
-                    }}
-                    updateReview={updateReview}
-                    cancelEdit={cancelEdit}
-                  />
-                ))}
-              </ul>
-              
-              {visibleReviews < reviewList.length && (
-                <div className="load-more-container">
-                  <button 
-                    className="load-more-button" 
-                    onClick={loadMoreReviews}
-                  >
-                    더보기 ({visibleReviews} / {reviewList.length})
-                  </button>
-                </div>
-              )}
-            </>
-          )}
-
-=======
 
           {reviewList.length === 0 ? (
             <p>등록된 리뷰가 없습니다.</p>
@@ -330,7 +277,6 @@ const MovieDetail = ({ movie, onClose }) => {
             </>
           )}
 
->>>>>>> f7bd009758018c9b3f9721174a3be4c8583f31ff
           {/* 하단 여백 확보 */}
           <div style={{ height: '20px' }}></div>
         </div>
