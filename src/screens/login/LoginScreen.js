@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react"
 import { AppContext } from "../../context/AppContext"
 import { Link, useNavigate } from "react-router-dom"
 import "../../css/login/LoginScreen.css"
+import logo from "../../logo/logo.png"
 import axios from "axios"
 
 const LoginScreen = () => {
@@ -26,6 +27,11 @@ const LoginScreen = () => {
   //   window.location.href = `/oauth2/authorization/${provider}`
   // }
 
+  // 로고 클릭 시 메인화면 띄우기
+  const handleLogoClick = () => {
+    navigate("/home")
+  }
+
   // 입력값 업데이트
   const handleChange = (e) => {
     const { id, value } = e.target
@@ -47,7 +53,7 @@ const LoginScreen = () => {
     ) {
       // 로그인 성공 시
       setUser({ username: formData.username}) // 사용자 정보를 Context에 저장
-      navigate("/"); // MainScreen으로 이동
+      navigate("/home"); // MainScreen으로 이동
     } else {
       // 에러 메시지 출력
       setError("아이디 또는 비밀번호가 일치하지 않습니다.");
@@ -56,6 +62,9 @@ const LoginScreen = () => {
 
   return (
     <div className="login-container">
+      <div className="logo-box">
+        <img src={logo} className="loginLogo" onClick={handleLogoClick}/>
+      </div>
       <div className="login-box">
         <h2>로그인</h2>
 
