@@ -4,9 +4,9 @@ import { fetchMovieDetails, fetchMovieCredits } from "../api/tmdb";
 import { FaStar } from "react-icons/fa";
 import moment from "moment";
 import "../css/App.css";
-import "../css/detail/Detail.css";
-import "../css/detail/Review.css";
-import "../css/detail/Modal.css";
+import "../css/detail/Detail.css"
+import "../css/detail/Review.css"
+import "../css/detail/Modal.css"
 import { AppContext } from "../context/AppContext";
 
 // 출연진 목록 컴포넌트
@@ -38,8 +38,8 @@ const StarRating = ({ rating, setRating, size = 30, readOnly }) => (
         key={index}
         size={size}
         color={index < rating ? "gold" : "lightgray"}
-        onClick={readOnly ? () => {} : () => setRating(index + 1)}
-        style={readOnly ? { pointerEvents: "none" } : {}}
+        onClick={readOnly ? () => { } : () => setRating(index + 1)}
+        style={readOnly ? { pointerEvents: "none", } : {}}
       />
     ))}
   </div>
@@ -73,7 +73,7 @@ const ReviewItem = ({
   editState,
   updateReview,
   cancelEdit,
-  username,
+  username
 }) => (
   <li className="review-item">
     <div className="review-item-container">
@@ -166,7 +166,7 @@ const MovieDetail = ({ movie, onClose }) => {
   const [editable, setEditable] = useState(false);
   const [visibleReviews, setVisibleReviews] = useState(3);
   const [editState, setEditState] = useState({ id: -1, rate: 5, review: "" });
-  const { user } = useContext(AppContext);
+  const { user } = useContext(AppContext)
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -176,12 +176,12 @@ const MovieDetail = ({ movie, onClose }) => {
 
     fetchDetails();
   }, [movie]);
-
+  
   const averageRating = calculateAverageRating(reviewList);
 
   const addReview = () => {
-    if (!user) {
-      alert("로그인한 유저만 리뷰를 등록 가능합니다");
+    if(!user){
+      alert("로그인한 유저만 리뷰를 등록 가능합니다")
       return;
     }
     const newReview = {
@@ -192,13 +192,14 @@ const MovieDetail = ({ movie, onClose }) => {
       date: moment().format("MM/DD HH:mm"),
     };
     if (!review) {
-      alert("리뷰 내용을 입력해주세요");
+      alert("리뷰 내용을 입력해주세요")
       return;
     }
     if (window.confirm("등록 하시겠습니까?")) {
       setReviewList((prev) => [newReview, ...prev]);
       setReview("");
       setRate(5);
+      // 새 리뷰 추가 시 더보기 상태 초기화
       setVisibleReviews(3);
     }
   };
@@ -206,6 +207,7 @@ const MovieDetail = ({ movie, onClose }) => {
   const handleRemove = (id) => {
     if (window.confirm("삭제 하시겠습니까?")) {
       setReviewList((prev) => prev.filter((item) => item.id !== id));
+      // 삭제 후 더보기 상태 조정
       setVisibleReviews(Math.min(visibleReviews, reviewList.length - 1));
     }
   };
@@ -235,7 +237,7 @@ const MovieDetail = ({ movie, onClose }) => {
   };
 
   const loadMoreReviews = () => {
-    setVisibleReviews((prev) => prev + 3);
+    setVisibleReviews(prev => prev + 3);
   };
 
   if (!movie) return <div>Loading...</div>;
@@ -254,15 +256,8 @@ const MovieDetail = ({ movie, onClose }) => {
         <div className="modal-movie-details">
           <h1>{movie.title}</h1>
           <p>{movie.overview}</p>
-          <p>
-            <strong>개봉일:</strong> {movie.release_date}
-          </p>
-          <p>
-            <strong>평점:</strong> {movie.vote_average}
-          </p>
-
-          {/* 출연진 목록 추가 */}
-          <ActorList actors={actor} />
+          <p><strong>개봉일:</strong> {movie.release_date}</p>
+          <p><strong>평점:</strong> {movie.vote_average}</p>
 
           {/* 리뷰 작성 폼 */}
           <ReviewForm
@@ -314,7 +309,7 @@ const MovieDetail = ({ movie, onClose }) => {
           )}
 
           {/* 하단 여백 확보 */}
-          <div style={{ height: "20px" }}></div>
+          <div style={{ height: '20px' }}></div>
         </div>
       </div>
     </div>

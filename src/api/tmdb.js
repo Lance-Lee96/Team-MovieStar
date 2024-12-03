@@ -71,7 +71,6 @@ export const fetchTopRatedMovies = async () => {
   }
 };
 
-
 //출연진 목록을 가져오는 함수
 export const fetchMovieCredits = async (movieId) => {
   try {
@@ -83,4 +82,3 @@ export const fetchMovieCredits = async (movieId) => {
     return { cast: [] }; // 오류 발생 시 기본값 설정
   }
 };
-
