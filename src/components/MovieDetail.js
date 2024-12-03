@@ -12,7 +12,6 @@ import { AppContext } from "../context/AppContext";
 // 출연진 목록 컴포넌트
 const ActorList = ({ actors }) => (
   <div className="actor-list">
-    <h3>출연진</h3>
     <ul>
       {actors.map((actor) => (
         <li key={actor.id}>
@@ -258,6 +257,8 @@ const MovieDetail = ({ movie, onClose }) => {
           <p>{movie.overview}</p>
           <p><strong>개봉일:</strong> {movie.release_date}</p>
           <p><strong>평점:</strong> {movie.vote_average}</p>
+
+          <h3>출연진</h3>
 
           {/* 출연진 목록 추가 */}
           <ActorList actors={actor} />

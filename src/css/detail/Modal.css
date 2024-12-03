@@ -18,8 +18,8 @@
     gap: 20px;
     padding: 20px;
     border-radius: 10px;
-    width: 70%; /* 너비를 적절히 설정 */
-    max-width: 800px; /* 최대 너비 제한 */
+    width: 100%; /* 너비를 적절히 설정 */
+    max-width: 1200px; /* 최대 너비 제한 */
     height: auto; /* 높이를 자동으로 설정 */
     max-height: 80vh; /* 높이 제한 해제 */
     overflow-y: auto;
@@ -46,14 +46,13 @@
   
   
   .modal-movie-poster {
-    width: 100%;
-    border-radius: 10px;
-    object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    flex-direction: column;
-    display: flex;
-    gap: 15px;
-  }
+    width: 300px; /* 포스터 크기를 키움 */
+    height: auto; /* 비율을 유지 */
+    border-radius: 10px; /* 모서리를 둥글게 */
+    margin: 20px auto; /* 중앙 정렬 */
+    display: block; /* 블록 레이아웃 */
+}
+
   
   .modal-movie-details {
     display: flex;
