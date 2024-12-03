@@ -259,6 +259,9 @@ const MovieDetail = ({ movie, onClose }) => {
           <p><strong>개봉일:</strong> {movie.release_date}</p>
           <p><strong>평점:</strong> {movie.vote_average}</p>
 
+          {/* 출연진 목록 추가 */}
+          <ActorList actors={actor} />
+
           {/* 리뷰 작성 폼 */}
           <ReviewForm
             rate={rate}
