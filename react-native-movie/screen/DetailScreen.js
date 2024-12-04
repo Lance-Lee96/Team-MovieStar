@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TextInput, Button, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import React, { act, useEffect, useState } from 'react';
+import { View, Text, Image, TextInput, Button, TouchableOpacity, ScrollView, StyleSheet,FlatList } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { fetchMovieDetails } from '../api/tmdb';
+import { fetchMovieDetails, fetchMovieCredits } from '../api/tmdb';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 
@@ -92,18 +92,42 @@ const ReviewList = ({ reviews, onEdit, onRemove, editable, editState, updateRevi
     </View>
 );
 
+// 출연진 목록 컴포넌트
+const ActorList = ({ actors }) => {
+    return (
+        <ScrollView horizontal contentContainerStyle={styles.actorListContainer}>
+            {actors.map((actor) => (
+                <View key={actor.id} style={styles.actorItem}>
+                    <Image
+                        source={{
+                            uri: `https://image.tmdb.org/t/p/w200${actor.profile_path}`,
+                        }}
+                        style={styles.actorImage}
+                    />
+                    <Text style={styles.actorText}>
+                        {actor.name} - {actor.character}
+                    </Text>
+                </View>
+            ))}
+        </ScrollView>
+    );
+};
+
+
+
 // 메인 MovieDetail 컴포넌트
 const DetailScreen = () => {
     const route = useRoute();
     const navigation = useNavigation();
     const { id } = route.params;
 
-    const [movie, setMovie] = useState(null);
+    const [movie, setMovie] = useState([]);
     const [rate, setRate] = useState(5);
     const [review, setReview] = useState('');
     const [reviewList, setReviewList] = useState([]);
     const [editable, setEditable] = useState(false);
     const [editState, setEditState] = useState({ id: -1, rate: 5, review: "" });
+    const [actor,setActor] = useState([]);
 
 const addReview = () => {
     const newReview = {
@@ -148,49 +172,81 @@ useEffect(() => {
         try {
             const movieDetails = await fetchMovieDetails(id);
             setMovie(movieDetails);
-          } catch (error) {
+        } catch (error) {
             console.error('Error fetching movie details:', error);
-          }
-        };
+        }
+    };
     getMovieDetails();
 }, [id]);
 
-if (!movie) return <Text>Loading...</Text>;
+// 출연진 정보 가져오기 부분
+useEffect(() => {
+    if (movie?.id) {  // movie가 있을 때만 실행
+        const fetchDetails = async () => {
+            try {
+                const castData = await fetchMovieCredits(movie.id);
+                setActor(castData.cast.slice(0, 10)); 
+            } catch (error) {
+                console.error('Error fetching actor details:', error);
+            }
+        };
+        fetchDetails();
+    }
+}, [movie]); // movie 상태가 변경될 때마다 실행
+
+ 
 
 return (
-    <ScrollView style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.backButton}>
-        <Text style={styles.backButton}>←</Text>
-      </TouchableOpacity>
-      <View style={styles.header}>
-        <Image
-          source={{ uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}` }}
-          style={styles.poster}
-        />
-        <View style={styles.movieDetails}>
-          <Text style={styles.title}>{movie.title}</Text>
-          <Text style={styles.overview}>{movie.overview}</Text>
-          <Text style={styles.releaseDate}>
-            <Text style={styles.bold}>Release Date: {movie.release_date}</Text> 
-          </Text>
-          <Text style={styles.rating}>
-            <Text style={styles.bold}>Rating: {movie.vote_average}</Text> 
-          </Text>
+        <ScrollView style={styles.container}>
+
+        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.backButton}>
+                <Text style={styles.backButton}>←</Text>
+        </TouchableOpacity>
+
+        <View style={styles.header}>
+            <Image
+                source={{ uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}` }}
+                style={styles.poster}
+            />
+            <View style={styles.movieDetails}>
+                <Text style={styles.title}>{movie.title}</Text>
+                <Text style={styles.overview}>{movie.overview}</Text>
+                <Text style={styles.releaseDate}>
+                    <Text style={styles.bold}>Release Date: {movie.release_date}</Text> 
+                </Text>
+                <Text style={styles.rating}>
+                    <Text style={styles.bold}>Rating: {movie.vote_average}/10</Text> 
+                </Text>            
+            </View>
         </View>
-      </View>
-      <ReviewForm rate={rate} setRate={setRate} review={review} setReview={setReview} addReview={addReview} />
-      <ReviewList
-        reviews={reviewList}
-        onEdit={handleEdit}
-        onRemove={handleRemove}
-        editable={editable}
-        editState={{
-            ...editState,
-            setEditState
-        }}
-        updateReview={updateReview}
-        cancelEdit={cancelEdit}
-      />
+        <View>
+            {/* 출연진 목록 컴포넌트 사용 */}
+            <Text style={styles.bold2}>출연진</Text>
+            <ActorList actors={actor}/>
+        </View> 
+
+        {/* 리뷰폼 */}
+        <ReviewForm
+            rate={rate}
+            setRate={setRate} 
+            review={review} 
+            setReview={setReview} 
+            addReview={addReview} 
+        />
+
+        {/* 리뷰리스트 */}
+        <ReviewList
+            reviews={reviewList}
+            onEdit={handleEdit}
+            onRemove={handleRemove}
+            editable={editable}
+            editState={{
+                ...editState,
+                setEditState
+            }}
+            updateReview={updateReview}
+            cancelEdit={cancelEdit}
+        />
     </ScrollView>
   );
 };
@@ -299,15 +355,34 @@ const styles = StyleSheet.create({
         color:"#fff",
         alignItems:'center',
         justifyContent:'center',
-        flex:1
+        flex:1,
+        margin:5
+    },
+    bold2:{
+        color:"#fff",
+        alignItems:'center',
+        justifyContent:'center',
+        flex:1,
+    },
+    actorListContainer: {
+        flexDirection: 'row', 
+        paddingHorizontal: 10,  
+    },
+    actorItem: {
+        marginRight: 15,  
+        alignItems: 'center',
+    },
+    actorImage: {
+        width: 60, 
+        height: 80,
+        borderRadius: 30,  
+    },
+    actorText: {
+        color: 'white',
+        fontSize: 12,
+        marginTop: 5,
     },
   });
 
-//   <TouchableOpacity style={styles.reviewEditButton} onPress={() => onEdit(item)}>
-//   <Text style={styles.buttonText}>수정</Text>
-// </TouchableOpacity>
-// <TouchableOpacity style={styles.reviewDeleteButton} onPress={() => onRemove(item.id)}>
-//   <Text style={styles.buttonText}>삭제</Text>
-// </TouchableOpacity>
 
 export default DetailScreen;
